@@ -6,7 +6,7 @@ import {tokenIsExpired} from './utils/tokenUtils';
 @inject(HttpClient, Router)
 export class App {
   message = 'Auth0 - Aurelia';
-  lock = new Auth0Lock('AUTH0_CLIENT_ID', 'AUTH0_DOMAIN');
+  lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
   isAuthenticated = false;
   
   constructor(http, router) {
