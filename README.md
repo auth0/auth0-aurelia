@@ -36,7 +36,7 @@ Set your credentials in `Auth0Lock`.
 
 ...
 
-lock = new Auth0Lock('AUTH0_CLIENT_ID', 'AUTH0_DOMAIN');
+lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
 
 ...
 ```
