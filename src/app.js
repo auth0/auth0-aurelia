@@ -12,6 +12,7 @@ export class App {
   constructor(http, router) {
     this.http = http;
     this.router = router;
+    var self = this;
     
     this.router.configure(config => {
       config.map([
@@ -35,6 +36,20 @@ export class App {
       });
     });
     
+    this.lock.on("authenticated", (authResult) => {
+      self.lock.getProfile(authResult.idToken, (error, profile) => {
+        if (error) {
+          // Handle error
+          return;
+        }
+
+        localStorage.setItem('id_token', authResult.idToken);
+        localStorage.setItem('profile', JSON.stringify(profile));
+        self.isAuthenticated = true;
+        self.lock.hide();
+      });
+    });
+
     if(tokenIsExpired())  {
       this.isAuthenticated = false;
     }
@@ -44,22 +59,14 @@ export class App {
   }
   
   login() {
-    this.lock.show((err, profile, token) => {
-      if(err) {
-        console.log(err);
-      }
-      else {
-        localStorage.setItem('profile', JSON.stringify(profile));
-        localStorage.setItem('id_token', token);
-        this.isAuthenticated = true;
-      }
-    });   
+    this.lock.show();   
   }
   
   logout() {
     localStorage.removeItem('profile');
     localStorage.removeItem('id_token');
     this.isAuthenticated = false;   
+    this.decodedJwt = null;
   }
   
   getSecretThing() {
